@@ -1,0 +1,36 @@
+import os
+import scipy.io as sio
+import string
+import numpy as np
+
+path1='/home/XXX/Desktop/Pythonprojects/tensorflow/EMG/CNN/data/train/'
+path2='/home/XXX/Desktop/Pythonprojects/tensorflow/EMG/CNN/data/test/'
+
+def LoadData():
+    X_train_orig=np.zeros((40,1000,128,1))
+    X_test_orig=np.zeros((1,40),dtype=int)
+    Y_train_orig=np.zeros((40,1000,128,1))
+    Y_test_orig=np.zeros((1,40),dtype=int)
+
+    m=0
+    for files1 in os.listdir(path1):
+        EMG=sio.loadmat(path1+files1)
+        data=EMG['data']
+        X_train_orig[m,:,:,0]=data
+        X_test_orig[0,m]=string.atoi(files1[4:7])-1
+        m=m+1
+
+    n=0
+    for files2 in os.listdir(path2):
+        EMG=sio.loadmat(path2+files2)
+        data=EMG['data']
+        Y_train_orig[n,:,:,0]=data
+        Y_test_orig[0,n]=string.atoi(files2[4:7])-1
+        n=n+1
+
+
+#    for i in range(80):
+#        X_test_orig[0,i]=int(X_test_orig[0,i])
+#        Y_test_orig[0,i]=int(Y_test_orig[0,i])
+
+    return X_train_orig,Y_train_orig,X_test_orig,Y_test_orig
